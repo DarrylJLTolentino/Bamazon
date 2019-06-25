@@ -12,3 +12,15 @@ CREATE TABLE products (
     stock_quantity INT,
     PRIMARY KEY (item_id)
 );
+
+INSERT INTO products (product_name, department_name, price, stock_quantity)
+VALUE ("blanket", "bedroom", 30, 300),
+("pen", "school", 1, 500),
+("cereal", "food", 5, 1000),
+("makeup wipes", "makeup", 4, 100),
+("purse", "accessories", 250, 10),
+("pants", "clothing", 20, 250),
+("socks", "clothing", 3, 750),
+("shoes", "clothing", 50, 150),
+("tissue", "toiletries", 2, 1000),
+("ping pong ball", "sports", 0.5, 2500);
