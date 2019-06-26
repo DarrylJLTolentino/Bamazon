@@ -55,3 +55,20 @@ function ChooseProduct() {
         CheckProduct(response.id, response.amount);
     })
 }
+
+function CheckProduct(id, amount) {
+    connection.query(
+        "SELECT * from products WHERE item_id = ?", [id], function (err, res) {
+            if (err) throw err;
+            // console.log(res);
+            if (amount > res.stock_quantity) {
+                console.log("Insufficient quantity!");
+            }
+            else {
+                var newQuantity = parseInt(res[0].stock_quantity) - parseInt(amount);
+                UpdateProduct(newQuantity, id, amount);
+            }
+        }
+    )
+}
+
