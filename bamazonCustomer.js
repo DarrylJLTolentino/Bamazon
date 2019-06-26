@@ -110,3 +110,21 @@ function RereadProduct(id, amount) {
     )
 }
 
+function ChooseToExit() {
+    inquirer.prompt([
+        {
+            type: "confirm",
+            name: "confirm",
+            message: "Would you like to buy anything else?"
+        }
+    ]).then(function (res) {
+        switch (res.confirm) {
+            case true:
+                showAll();
+                break;
+            case false:
+                connection.end();
+                break;
+        }
+    })
+}
