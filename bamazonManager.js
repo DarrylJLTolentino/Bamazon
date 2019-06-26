@@ -50,3 +50,21 @@ function AskManager() {
         }
     })
 }
+
+function ViewProductsOnSale() {
+    console.log("Showing all products in Bamazon...\n");
+    // console.log("item_id  product_name                          department_name  price  stock_quantity");
+    // console.log("-------  ------------------------------------  ---------------  -----  --------------");
+    var table = new Table({
+        head: ["item_id", "product_name", "product_sales", "department_name", "price", "stock_quantity"],
+        colWidths: [15, 25, 20, 25, 10, 20]
+    });
+    connection.query("SELECT * FROM productsManager", function (err, res) {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            table.push([res[i].item_id, res[i].product_name, res[i].product_sales, res[i].department_name, res[i].price, res[i].stock_quantity]);
+        }
+        console.log(table.toString(), "\n");
+        AskManager();
+    });
+}
