@@ -72,3 +72,21 @@ function CheckProduct(id, amount) {
     )
 }
 
+function UpdateProduct(newQuantity, id, amount) {
+    connection.query(
+        "UPDATE products SET ? WHERE ?",
+        [
+            {
+                stock_quantity: newQuantity
+            },
+            {
+                item_id: id
+            }
+        ], function (err, res) {
+            if (err) throw err;
+            // console.log(res);
+            RereadProduct(id, amount);
+        }
+    )
+}
+
