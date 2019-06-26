@@ -19,7 +19,6 @@ var connection = mysql.createConnection({
 connection.connect(function (err) {
     if (err) throw err;
     showAll();
-    // menu();
 });
 
 function showAll() {
@@ -35,14 +34,24 @@ function showAll() {
         for (var i = 0; i < res.length; i++) {
             table.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
         }
-        console.log(table.toString());
+        console.log(table.toString(), "\n");
+        ChooseProduct();
     });
 }
 
-// function menu() {
-//     inquirer.prompt([
-//         {
-//             type: 
-//         }
-//     ])
-// }
+function ChooseProduct() {
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "id",
+            message: "What is the id of the product you would like to purchase?"
+        },
+        {
+            type: "input",
+            name: "amount",
+            message: "How much of the product would you like to purchase?"
+        }
+    ]).then(function (response) {
+        CheckProduct(response.id, response.amount);
+    })
+}
