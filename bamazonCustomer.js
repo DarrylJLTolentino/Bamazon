@@ -90,3 +90,23 @@ function UpdateProduct(newQuantity, id, amount) {
     )
 }
 
+function RereadProduct(id, amount) {
+    connection.query(
+        "SELECT * from products WHERE item_id = ?", [id], function (err, res) {
+            if (err) throw err;
+            // console.log(res);
+            else {
+                if (res[0].product_name[res[0].product_name.length - 1] === "s") {
+                    console.log(amount, res[0].product_name + " sold!");
+                }
+                else {
+                    console.log(amount, res[0].product_name + "(s) sold!");
+                }
+                var cost = amount * res[0].price;
+                console.log("Total cost: $" + cost, "!");
+                ChooseToExit();
+            }
+        }
+    )
+}
+
