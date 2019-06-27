@@ -100,19 +100,70 @@ function AddInventory() {
         {
             type: "number",
             name: "restock",
-            message: "How much of the product do you want to restock?"
-        }
-    ]).then(function(response) {
-        connection.query("UPDATE products SET stock_quantity = stock_quantity + ? WHERE ?", 
-        [
-            response.restock,
-            {
-                item_id: response.id
+            message: "How much of the product do you want to restock?",
+            validate: function (value) {
+                if (isNaN(value) === false && value !== "") {
+                    return true;
+                }
+                return false;
             }
-        ], function (err, res) {
-            if (err) throw err;
-            console.log("\n", response.restock, "more inventory added to item_id", response.id, ".\n");
-            AskManager();
-        });
+        }
+    ]).then(function (response) {
+        connection.query("UPDATE products SET stock_quantity = stock_quantity + ? WHERE ?",
+            [
+                response.restock,
+                {
+                    item_id: response.id
+                }
+            ], function (err, res) {
+                if (err) throw err;
+                console.log("\n", response.restock, "more inventory added to item_id", response.id, ".\n");
+                AskManager();
+            });
+    });
+}
+
+function AddNewProduct() {
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "product_name",
+            message: "What is the name of your new product?"
+        },
+        {
+            type: "list",
+            name: "department_name",
+            message: "What department should this product be part of?",
+            choices: ["bedroom", "school", "food", "makeup", "accessories", "clothing", "toiletries", "sports", "new department"]
+        },
+        {
+            type: "number",
+            name: "price",
+            message: "How much does this product cost?",
+            validate: function (value) {
+                if (isNaN(value) === false && value !== "") {
+                    return true;
+                }
+                return false;
+            }
+        },
+        {
+            type: "number",
+            name: "stock_quantity",
+            message: "How many of the product will be in stock?",
+            validate: function (value) {
+                if (isNaN(value) === false && value !== "") {
+                    return true;
+                }
+                return false;
+            }
+        }
+    ]).then(function (res) {
+        connection.query("INSERT INTO products (product_name, product_sales, department_name, price, stock_quantity) VALUE (?, ?, ?, ?, ?)",
+            [res.product_name, 0, res.department_name, res.price, res.stock_quantity], function (err, response) {
+                if (err) throw err;
+                console.log(res.product_name, "got added to products table!");
+                AskManager();
+            });
     });
 }
