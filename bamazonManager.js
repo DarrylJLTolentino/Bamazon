@@ -44,7 +44,7 @@ function AskManager() {
                 AddNewProduct();
                 break;
             case "Exit":
-                console.log("Terminating link...\n");
+                console.log("Terminating link...");
                 connection.end();
                 break;
         }
@@ -87,5 +87,32 @@ function ViewLowInventory() {
             console.log(table.toString(), "\n");
         }
         AskManager();
+    });
+}
+
+function AddInventory() {
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "id",
+            message: "Please give id of product you want to restock:"
+        },
+        {
+            type: "number",
+            name: "restock",
+            message: "How much of the product do you want to restock?"
+        }
+    ]).then(function(response) {
+        connection.query("UPDATE products SET stock_quantity = stock_quantity + ? WHERE ?", 
+        [
+            response.restock,
+            {
+                item_id: response.id
+            }
+        ], function (err, res) {
+            if (err) throw err;
+            console.log("\n", response.restock, "more inventory added to item_id", response.id, ".\n");
+            AskManager();
+        });
     });
 }
