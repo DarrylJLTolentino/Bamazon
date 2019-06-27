@@ -29,7 +29,7 @@ function AskManager() {
             message: "What would you like to do, Manager?",
             choices: ["View Products for Sale", "View Low Inventory", "Add to Inventory", "Add New Product", "Exit"]
         }
-    ]).then(function(response) {
+    ]).then(function (response) {
         switch (response.choice) {
             case "View Products for Sale":
                 ViewProductsOnSale();
@@ -52,19 +52,40 @@ function AskManager() {
 }
 
 function ViewProductsOnSale() {
-    console.log("Showing all products in Bamazon...\n");
+    console.log("Showing all products...\n");
     // console.log("item_id  product_name                          department_name  price  stock_quantity");
     // console.log("-------  ------------------------------------  ---------------  -----  --------------");
     var table = new Table({
         head: ["item_id", "product_name", "product_sales", "department_name", "price", "stock_quantity"],
         colWidths: [15, 25, 20, 25, 10, 20]
     });
-    connection.query("SELECT * FROM productsManager", function (err, res) {
+    connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
             table.push([res[i].item_id, res[i].product_name, res[i].product_sales, res[i].department_name, res[i].price, res[i].stock_quantity]);
         }
         console.log(table.toString(), "\n");
+        AskManager();
+    });
+}
+
+function ViewLowInventory() {
+    console.log("Showing all products that are low in inventory...\n");
+    var table = new Table({
+        head: ["item_id", "product_name", "product_sales", "department_name", "price", "stock_quantity"],
+        colWidths: [15, 25, 20, 25, 10, 20]
+    });
+    connection.query("SELECT * FROM products WHERE stock_quantity < 5", function (err, res) {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            table.push([res[i].item_id, res[i].product_name, res[i].product_sales, res[i].department_name, res[i].price, res[i].stock_quantity]);
+        }
+        if (table.length < 1) {
+            console.log("All products are ok with inventory!");
+        }
+        else {
+            console.log(table.toString(), "\n");
+        }
         AskManager();
     });
 }

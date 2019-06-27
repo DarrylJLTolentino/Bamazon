@@ -74,10 +74,13 @@ function CheckProduct(id, amount) {
 
 function UpdateProduct(newQuantity, id, amount) {
     connection.query(
-        "UPDATE products SET ? WHERE ?",
+        "UPDATE products SET ?, ? WHERE ?",
         [
             {
                 stock_quantity: newQuantity
+            },
+            {
+                product_sales: amount
             },
             {
                 item_id: id
