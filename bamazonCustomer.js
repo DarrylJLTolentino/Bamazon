@@ -66,13 +66,13 @@ function CheckProduct(id, amount) {
             }
             else {
                 var newQuantity = parseInt(res[0].stock_quantity) - parseInt(amount);
-                UpdateProduct(newQuantity, id, amount);
+                UpdateProduct(newQuantity, id, amount, res[0].price);
             }
         }
     )
 }
 
-function UpdateProduct(newQuantity, id, amount) {
+function UpdateProduct(newQuantity, id, amount, price) {
     connection.query(
         "UPDATE products SET ?, ? WHERE ?",
         [
@@ -80,7 +80,7 @@ function UpdateProduct(newQuantity, id, amount) {
                 stock_quantity: newQuantity
             },
             {
-                product_sales: amount
+                product_sales: amount * price
             },
             {
                 item_id: id
