@@ -18,8 +18,26 @@ var connection = mysql.createConnection({
 
 connection.connect(function (err) {
     if (err) throw err;
-    AskSuperVisor();
+    showAll();
 });
+
+function showAll() {
+    console.log("\nShowing all products in Bamazon...\n");
+    // console.log("item_id  product_name                          department_name  price  stock_quantity");
+    // console.log("-------  ------------------------------------  ---------------  -----  --------------");
+    var table = new Table({
+        head: ["item_id", "product_name", "department_name", "price", "stock_quantity"],
+        colWidths: [15, 25, 25, 10, 20]
+    });
+    connection.query("SELECT * FROM products", function (err, res) {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            table.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
+        }
+        console.log(table.toString(), "\n");
+        AskSuperVisor();
+    });
+}
 
 function AskSuperVisor() {
     inquirer.prompt([
@@ -57,7 +75,6 @@ function ViewProductSales() {
     });
     connection.query("SELECT departments.*, products.product_sales, products.product_sales - departments.over_head_costs AS total_profit FROM departments LEFT JOIN products ON departments.department_name = products.department_name GROUP BY department_name", function (err, res) {
         if (err) throw err;
-        console.log(res);
         for (var i = 0; i < res.length; i++) {
             if (res[i].product_sales === null && res[i].total_profit === null) {
                 table.push([res[i].department_id, res[i].department_name, res[i].over_head_costs, 0, -res[i].over_head_costs]);
@@ -66,9 +83,9 @@ function ViewProductSales() {
                 table.push([res[i].department_id, res[i].department_name, res[i].over_head_costs, res[i].product_sales, res[i].total_profit]);
             }
         }
-        // console.log(table);
+        console.log("\nShowing Product Sales...\n");
         console.log(table.toString(), "\n");
-        AskSuperVisor();
+        showAll();
     });
 }
 
@@ -93,9 +110,8 @@ function CreateNewDepartment() {
     ]).then(function (response) {
         connection.query("INSERT INTO departments (department_name, over_head_costs) VALUES (?, ?)", [response.department.toLowerCase(), response.over_head_costs], function (err, res) {
             if (err) throw err;
-            console.log(res);
             console.log("New Department is now created!");
-            AskSuperVisor();
+            showAll();
         });
     });
 }

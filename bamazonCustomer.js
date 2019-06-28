@@ -22,7 +22,7 @@ connection.connect(function (err) {
 });
 
 function showAll() {
-    console.log("Showing all products in Bamazon...\n");
+    console.log("\nShowing all products in Bamazon...\n");
     // console.log("item_id  product_name                          department_name  price  stock_quantity");
     // console.log("-------  ------------------------------------  ---------------  -----  --------------");
     var table = new Table({
@@ -49,7 +49,13 @@ function ChooseProduct() {
         {
             type: "input",
             name: "amount",
-            message: "How much of the product would you like to purchase?"
+            message: "How much of the product would you like to purchase?",
+            validate: function (value) {
+                if (isNaN(value) === false && value !== "") {
+                    return true;
+                }
+                return false;
+            }
         }
     ]).then(function (response) {
         CheckProduct(response.id, response.amount);
@@ -61,8 +67,11 @@ function CheckProduct(id, amount) {
         "SELECT * from products WHERE item_id = ?", [id], function (err, res) {
             if (err) throw err;
             // console.log(res);
-            if (amount > res.stock_quantity) {
+            console.log(parseInt(amount));
+            console.log(parseInt(res[0].stock_quantity));
+            if (parseInt(amount) > parseInt(res[0].stock_quantity)) {
                 console.log("Insufficient quantity!");
+                ChooseProduct();
             }
             else {
                 var newQuantity = parseInt(res[0].stock_quantity) - parseInt(amount);
