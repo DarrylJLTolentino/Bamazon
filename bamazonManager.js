@@ -124,6 +124,13 @@ function AddInventory() {
 }
 
 function AddNewProduct() {
+    var arr = [];
+    connection.query("SELECT department_name FROM departments", function(err, res) {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            arr.push(res[i].department_name);
+        }
+    })
     inquirer.prompt([
         {
             type: "input",
@@ -134,7 +141,7 @@ function AddNewProduct() {
             type: "list",
             name: "department_name",
             message: "What department should this product be part of?",
-            choices: ["bedroom", "school", "food", "makeup", "accessories", "clothing", "toiletries", "sports", "new department"]
+            choices: arr
         },
         {
             type: "number",

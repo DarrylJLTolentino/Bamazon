@@ -44,7 +44,13 @@ function ChooseProduct() {
         {
             type: "input",
             name: "id",
-            message: "What is the id of the product you would like to purchase?"
+            message: "What is the id of the product you would like to purchase?",
+            validate: function (value) {
+                if (isNaN(value) === false && value !== "") {
+                    return true;
+                }
+                return false;
+            }
         },
         {
             type: "input",
@@ -69,12 +75,12 @@ function CheckProduct(id, amount) {
             // console.log(res);
             // console.log(parseInt(amount));
             // console.log(parseInt(res[0].stock_quantity));
-            if (parseInt(amount) > parseInt(res[0].stock_quantity)) {
+            if (parseInt(amount) > parseFloat(res[0].stock_quantity)) {
                 console.log("Insufficient quantity!");
                 ChooseProduct();
             }
             else {
-                var newQuantity = parseInt(res[0].stock_quantity) - parseInt(amount);
+                var newQuantity = parseFloat(res[0].stock_quantity) - parseInt(amount);
                 UpdateProduct(newQuantity, id, amount, res[0].price);
             }
         }
