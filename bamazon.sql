@@ -27,7 +27,18 @@ VALUE ("blanket", 0, "bedroom", 30, 300),
 ("ping pong ball", 0, "sports", 0.5, 2500);
 
 CREATE TABLE departments (
-    department_id INT NOT NULL AUTO_INCREMENT,
+    department_id INT AUTO_INCREMENT NOT NULL,
     department_name VARCHAR(50),
-    over_head_costs INT
+    over_head_costs INT,
+    PRIMARY KEY (department_id)
 );
+
+INSERT INTO departments (department_id, department_name, over_head_costs)
+VALUE (1, "bedroom", 300),
+(2, "school", 250),
+(3, "food", 2500),
+(4, "makeup", 40),
+(5, "accessories", 1250),
+(6, "clothing", 2000),
+(7, "toiletries", 350),
+(8, "sports", 500);
