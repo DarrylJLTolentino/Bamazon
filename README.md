@@ -13,3 +13,26 @@ In bamazonManager.js, the manager is prompted with a choice. If View Products fo
 ![](media/bam-supervisor.gif "gif of bamazonSupervisor.js")
 In bamazonSupervisor.js, the supervisor is shown a table with all products within the database and is prompted to either view product sales by department or create a new department. If view product sales by department is chosen, then the manager will see a table of the department id, department name, over head costs, the product sales, and the total profit. If create a new department is chosen, the supervisor will be prompted to provide a name for the new department and the over head costs. Then the information will be inserted into the departments table within the database. Choosing exit will end the connection to the server. In the gif, we reopen bamazonManager to show that the departments list updated when choosing to add a new product.
 
+######
+
+| Technology Used | Reference |
+| --------------- | --------- |
+| JavaScript | https://www.javascript.com/ |
+| NodeJs | https://nodejs.org/en/ |
+| MySQL | https://www.mysql.com/ |
+| inquirer | https://www.npmjs.com/package/inquirer |
+| cli-table | https://www.npmjs.com/package/cli-table |
+
+######
+
+| Versioning | Reference |
+| --------------- | --------- |
+| Github | https://github.com/ |
+
+######
+
+## Author
+- Darryl Tolentino
+
+## Acknowledgements
+Jake Dudum - For helping me fix syntax
