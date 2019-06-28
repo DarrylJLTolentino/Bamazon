@@ -67,8 +67,8 @@ function CheckProduct(id, amount) {
         "SELECT * from products WHERE item_id = ?", [id], function (err, res) {
             if (err) throw err;
             // console.log(res);
-            console.log(parseInt(amount));
-            console.log(parseInt(res[0].stock_quantity));
+            // console.log(parseInt(amount));
+            // console.log(parseInt(res[0].stock_quantity));
             if (parseInt(amount) > parseInt(res[0].stock_quantity)) {
                 console.log("Insufficient quantity!");
                 ChooseProduct();
