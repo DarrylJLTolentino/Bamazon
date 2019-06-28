@@ -29,7 +29,7 @@ function AskSuperVisor() {
             message: "What would you like to do, Supervisor?",
             choices: ["View Product Sales by Department", "Create New Department", "Exit"]
         }
-    ]).then(function(response) {
+    ]).then(function (response) {
         switch (response.choice) {
             case "View Product Sales by Department":
                 ViewProductSales();
@@ -55,14 +55,47 @@ function ViewProductSales() {
         head: ["department_id", "department_name", "over_head_costs", "product_sales", "total_profit"],
         colWidths: [20, 25, 25, 15, 15]
     });
-    connection.query("SELECT departments.*, products.product_sales, products.product_sales - departments.over_head_costs AS total_profit FROM departments LEFT JOIN products ON departments.department_name = products.department_name GROUP BY department_name", function(err, res) {
+    connection.query("SELECT departments.*, products.product_sales, products.product_sales - departments.over_head_costs AS total_profit FROM departments LEFT JOIN products ON departments.department_name = products.department_name GROUP BY department_name", function (err, res) {
         if (err) throw err;
         console.log(res);
         for (var i = 0; i < res.length; i++) {
-            table.push([res[i].department_id, res[i].department_name, res[i].over_head_costs, res[i].product_sales, res[i].total_profit]);
+            if (res[i].product_sales === null && res[i].total_profit === null) {
+                table.push([res[i].department_id, res[i].department_name, res[i].over_head_costs, 0, -res[i].over_head_costs]);
+            }
+            else {
+                table.push([res[i].department_id, res[i].department_name, res[i].over_head_costs, res[i].product_sales, res[i].total_profit]);
+            }
         }
         // console.log(table);
         console.log(table.toString(), "\n");
         AskSuperVisor();
+    });
+}
+
+function CreateNewDepartment() {
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "department",
+            message: "What is the name of the new department?"
+        },
+        {
+            type: "number",
+            name: "over_head_costs",
+            message: "What is the over head costs?",
+            validate: function (value) {
+                if (isNaN(value) === false && value !== "") {
+                    return true;
+                }
+                return false;
+            }
+        }
+    ]).then(function (response) {
+        connection.query("INSERT INTO departments (department_name, over_head_costs) VALUES (?, ?)", [response.department.toLowerCase(), response.over_head_costs], function (err, res) {
+            if (err) throw err;
+            console.log(res);
+            console.log("New Department is now created!");
+            AskSuperVisor();
+        });
     });
 }
